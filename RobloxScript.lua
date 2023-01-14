@@ -32,7 +32,7 @@ for i,v in next, welds do
 	origc0s[i] = v.C0
 end
 function stopAnims()
-    NLS([[
+	NLS([[
 	    local chr = owner.Character
 	    local hum = chr:FindFirstChildOfClass("Humanoid")
 	    for i,v in next, hum.Animator:GetPlayingAnimationTracks() do
@@ -43,16 +43,17 @@ function stopAnims()
 		pcall(function()
 			task.cancel(v)
 		end)
+		anims[i] = nil
 	end
-    for i,v in next, tweens do
-        pcall(function()
-            v:Stop()
-        end)
-    end
-    for i,v in next, origc0s do
-        welds[i].C0 = v
-    end
-    if(animate)then
+	for i,v in next, tweens do
+		pcall(function()
+			v:Stop()
+		end)
+	end
+	for i,v in next, origc0s do
+		welds[i].C0 = v
+	end
+	if(animate)then
 		animate.Disabled = false
 	end
 end
@@ -65,8 +66,8 @@ function setC0s(tbl : {},time,easestyle)
 				local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time,easestyle),{
 					C0 = origc0s[i]*v.CFrame
 				})
-                tw:Play()
-                table.insert(tweens,tw)
+				tw:Play()
+				table.insert(tweens,tw)
 			else
 				welds[i].C0 = origc0s[i]*v.CFrame
 			end
@@ -75,10 +76,10 @@ function setC0s(tbl : {},time,easestyle)
 			if(welds[i])then
 				if(tweening)then
 					local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time,easestyle),{
-                        C0 = origc0s[i]*v.CFrame
-                    })
-                    tw:Play()
-                    table.insert(tweens,tw)
+						C0 = origc0s[i]*v.CFrame
+					})
+					tw:Play()
+					table.insert(tweens,tw)
 				else
 					welds[i].C0 = origc0s[i]*v.CFrame
 				end
@@ -98,6 +99,7 @@ function playAnim(name : string)
 	end
 	local keyframes = data.Keyframes
 	local looping = data.Properties.Looping or false
+	print(looping)
 	local lastt = 0
 	local easestyle = Enum.EasingStyle.Linear
 	local function onend()
@@ -111,10 +113,16 @@ function playAnim(name : string)
 			local thread = task.delay(lastkeyframe,onend)
 			table.insert(anims,thread)
 			for i,v in next, keyframes do
-				local thread = task.delay(i,function()
+				local thread
+				thread = task.delay(i,function()
 					local time = i-lastt
 					setC0s(v,i-lastt,easestyle)
 					lastt = i
+					for i,v in next, anims do
+						if(v == thread)then
+							anims[i] = nil
+						end
+					end
 				end)
 				table.insert(anims,thread)
 			end
@@ -135,10 +143,16 @@ function playAnim(name : string)
 	local thread = task.delay(lastkeyframe,onend)
 	table.insert(anims,thread)
 	for i,v in next, keyframes do
-		local thread = task.delay(i,function()
+		local thread 
+		thread = task.delay(i,function()
 			local time = i-lastt
 			setC0s(v,i-lastt,easestyle)
 			lastt = i
+			for i,v in next, anims do
+				if(v == thread)then
+					anims[i] = nil
+				end
+			end
 		end)
 		table.insert(anims,thread)
 	end
@@ -148,15 +162,15 @@ playAnim("Kazotsky")
 
 owner.Chatted:Connect(function(message)
 	if(string.lower(message):sub(1,5)=="anim!")then
-        stopAnims()
+		stopAnims()
 		playAnim(string.split(message,"!")[2])
-    elseif(string.lower(message):sub(1,8)=="tweened!")then
-        local t = string.split(message,"!")[2]
-        if(t=="false")then
-            tweening = false
-        else
-            tweening = true
-        end
-        print(tweening)
+	elseif(string.lower(message):sub(1,8)=="tweened!")then
+		local t = string.split(message,"!")[2]
+		if(t=="false")then
+			tweening = false
+		else
+			tweening = true
+		end
+		print(tweening)
 	end
 end)
