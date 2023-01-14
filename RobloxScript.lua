@@ -52,6 +52,9 @@ function stopAnims()
     for i,v in next, origc0s do
         welds[i].C0 = v
     end
+    if(animate)then
+		animate.Disabled = false
+	end
 end
 
 function setC0s(tbl : {},time,easestyle)
@@ -86,9 +89,6 @@ end
 
 function playAnim(name : string)
 	stopAnims()
-	if(animate)then
-		animate.Disabled = false
-	end
 	local data = getData(name)
 	if(not data)then
 		return print("Doesnt Exist.")
