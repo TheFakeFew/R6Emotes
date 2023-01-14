@@ -125,7 +125,6 @@ playAnim("Kazotsky")
 
 owner.Chatted:Connect(function(message)
 	if(string.lower(message):sub(1,5)=="anim!")then
-		stopAnims()
 		playAnim(string.split(message,"!")[2])
 	end
 end)
