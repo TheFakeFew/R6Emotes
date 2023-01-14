@@ -43,8 +43,9 @@ function stopAnims()
 		pcall(function()
 			task.cancel(v)
 		end)
-		anims[i] = nil
 	end
+	table.clear(anims)
+	wait()
 	for i,v in next, tweens do
 		pcall(function()
 			v:Stop()
@@ -104,6 +105,7 @@ function playAnim(name : string)
 	local easestyle = Enum.EasingStyle.Linear
 	local function onend()
 		if(looping)then
+			table.clear(anims)
 			local lastkeyframe = 0
 			for i,v in next, keyframes do
 				if(i>lastkeyframe)then
@@ -118,11 +120,6 @@ function playAnim(name : string)
 					local time = i-lastt
 					setC0s(v,i-lastt,easestyle)
 					lastt = i
-					for i,v in next, anims do
-						if(v == thread)then
-							anims[i] = nil
-						end
-					end
 				end)
 				table.insert(anims,thread)
 			end
@@ -148,11 +145,6 @@ function playAnim(name : string)
 			local time = i-lastt
 			setC0s(v,i-lastt,easestyle)
 			lastt = i
-			for i,v in next, anims do
-				if(v == thread)then
-					anims[i] = nil
-				end
-			end
 		end)
 		table.insert(anims,thread)
 	end
