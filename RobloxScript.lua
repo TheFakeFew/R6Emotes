@@ -125,9 +125,6 @@ function playAnim(name : string)
 			end
 		else
 			stopAnims()
-			if(animate)then
-				animate.Disabled = false
-			end
 		end
 	end
 	local lastkeyframe = 0
