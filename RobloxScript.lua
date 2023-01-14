@@ -1,4 +1,3 @@
-wait(2)
 if(not owner)then
 	getfenv(1).owner = script.Parent:IsA("PlayerGui") and script.Parent.Parent or game:GetService('Players'):GetPlayerFromCharacter(script.Parent)
 end
@@ -83,7 +82,9 @@ function playAnim(name : string)
 			stopAnims()
 			local lastkeyframe = 0
 			for i,v in next, keyframes do
-				lastkeyframe = i
+				if(i>lastkeyframe)then
+					lastkeyframe = i
+				end
 			end
 			local thread = task.delay(lastkeyframe,onend)
 			table.insert(anims,thread)
