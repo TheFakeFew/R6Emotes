@@ -147,8 +147,6 @@ function playAnim(name : string)
 	end
 end
 
-playAnim("Kazotsky")
-
 owner.Chatted:Connect(function(message)
 	if(string.lower(message):sub(1,5)=="anim!")then
 		stopAnims()
