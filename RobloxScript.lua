@@ -79,7 +79,6 @@ function playAnim(name : string)
 	local easestyle = Enum.EasingStyle.Linear
 	local function onend()
 		if(looping)then
-			stopAnims()
 			local lastkeyframe = 0
 			for i,v in next, keyframes do
 				if(i>lastkeyframe)then
