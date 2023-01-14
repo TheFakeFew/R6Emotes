@@ -1,12 +1,10 @@
+wait(2)
 if(not owner)then
 	getfenv(1).owner = script.Parent:IsA("PlayerGui") and script.Parent.Parent or game:GetService('Players'):GetPlayerFromCharacter(script.Parent)
 end
 local plr : Player = owner
 local chr : Model = owner.Character
 local hum : Humanoid = chr:FindFirstChildOfClass("Humanoid")
-for i,v in next, hum.Animator:GetPlayingAnimationTracks() do
-	v:Stop()
-end
 local animate = chr.Animate
 local tweening = true
 function getData(name : string)
@@ -15,6 +13,21 @@ function getData(name : string)
 	return DATA or nil
 end
 local anims = {}
+function stopAnims()
+	NLS([[
+		local chr = owner.Character
+		local hum = chr:FindFirstChildOfClass("Humanoid")
+		for i,v in next, hum.Animator:GetPlayingAnimationTracks() do
+			v:Stop()
+		end
+	]],chr)
+	for i,v in next, anims do
+		pcall(function()
+			task.cancel(v)
+		end)
+	end
+end
+stopAnims()
 local welds = {}
 for i,v in next, chr:GetDescendants() do
 	if(v:IsA("JointInstance") and not v:FindFirstAncestorOfClass("Accessory"))then
@@ -26,12 +39,12 @@ for i,v in next, welds do
 	origc0s[i] = v.C0
 end
 
-function setC0s(tbl : {},time)
+function setC0s(tbl : {},time,easestyle)
 	local anims = tbl["HumanoidRootPart"]
 	for i,v in next, anims do
 		if(welds[i])then
 			if(tweening)then
-				game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time),{
+				game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time,easestyle),{
 					C0 = origc0s[i]*v.CFrame
 				}):Play()
 			else
@@ -41,7 +54,7 @@ function setC0s(tbl : {},time)
 		for i,v in next, v do
 			if(welds[i])then
 				if(tweening)then
-					game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time),{
+					game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time,easestyle),{
 						C0 = origc0s[i]*v.CFrame
 					}):Play()
 				else
@@ -52,14 +65,6 @@ function setC0s(tbl : {},time)
 	end
 end
 
-function stopAnims()
-	for i,v in next, anims do
-		pcall(function()
-			task.cancel(v)
-		end)
-	end
-end
-
 function playAnim(name : string)
 	stopAnims()
 	local data = getData(name)
@@ -67,12 +72,10 @@ function playAnim(name : string)
 		return print("Doesnt Exist.")
 	end
 	animate.Disabled = true
-	for i,v in next, hum.Animator:GetPlayingAnimationTracks() do
-		v:Stop()
-	end
 	local keyframes = data.Keyframes
 	local looping = data.Properties.Looping or false
 	local lastt = 0
+	local easestyle = Enum.EasingStyle.Linear
 	local function onend()
 		if(looping)then
 			stopAnims()
@@ -85,7 +88,7 @@ function playAnim(name : string)
 			for i,v in next, keyframes do
 				local thread = task.delay(i,function()
 					local time = i-lastt
-					setC0s(v,i-lastt)
+					setC0s(v,i-lastt,easestyle)
 					lastt = i
 				end)
 				table.insert(anims,thread)
@@ -107,7 +110,7 @@ function playAnim(name : string)
 	for i,v in next, keyframes do
 		local thread = task.delay(i,function()
 			local time = i-lastt
-			setC0s(v,i-lastt)
+			setC0s(v,i-lastt,easestyle)
 			lastt = i
 		end)
 		table.insert(anims,thread)
