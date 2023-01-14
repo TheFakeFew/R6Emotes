@@ -4,20 +4,24 @@ end
 local plr : Player = owner
 local chr : Model = owner.Character
 local hum : Humanoid = chr:FindFirstChildOfClass("Humanoid")
+for i,v in next, hum.Animator:GetPlayingAnimationTracks() do
+	v:Stop()
+end
 local animate = chr.Animate
 local tweening = true
 function getData(name : string)
-	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/"..name or ""..".lua")
+	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/"..(name or "")..".lua")
 	local DATA = loadstring(data or "")()
 	return DATA or nil
 end
 local anims = {}
 local welds = {}
 for i,v in next, chr:GetDescendants() do
-	if(v:IsA("JointInstance"))then
+	if(v:IsA("JointInstance") and not v:FindFirstAncestorOfClass("Accessory"))then
 		welds[v.Part1.Name or ""] = v
 	end
 end
+print(welds)
 local origc0s = {}
 for i,v in next, welds do
 	origc0s[i] = v.C0
@@ -62,6 +66,9 @@ function playAnim(name : string)
 		return print("Doesnt Exist.")
 	end
 	animate.Disabled = true
+	for i,v in next, hum.Animator:GetPlayingAnimationTracks() do
+		v:Stop()
+	end
 	local keyframes = data.Keyframes
 	local looping = data.Properties.Looping or false
 	local lastt = 0
