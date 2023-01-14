@@ -21,7 +21,6 @@ for i,v in next, chr:GetDescendants() do
 		welds[v.Part1.Name or ""] = v
 	end
 end
-print(welds)
 local origc0s = {}
 for i,v in next, welds do
 	origc0s[i] = v.C0
@@ -55,7 +54,9 @@ end
 
 function stopAnims()
 	for i,v in next, anims do
-		task.cancel(v)
+		pcall(function()
+			task.cancel(v)
+		end)
 	end
 end
 
@@ -72,8 +73,9 @@ function playAnim(name : string)
 	local keyframes = data.Keyframes
 	local looping = data.Properties.Looping or false
 	local lastt = 0
-	function onend()
+	local function onend()
 		if(looping)then
+			stopAnims()
 			local lastkeyframe = 0
 			for i,v in next, keyframes do
 				lastkeyframe = i
@@ -95,8 +97,11 @@ function playAnim(name : string)
 	end
 	local lastkeyframe = 0
 	for i,v in next, keyframes do
-		lastkeyframe = i
+		if(i>lastkeyframe)then
+			lastkeyframe = i
+		end
 	end
+	print(lastkeyframe)
 	local thread = task.delay(lastkeyframe,onend)
 	table.insert(anims,thread)
 	for i,v in next, keyframes do
@@ -113,6 +118,7 @@ playAnim("Kazotsky")
 
 owner.Chatted:Connect(function(message)
 	if(string.lower(message):sub(1,5)=="anim!")then
+		stopAnims()
 		playAnim(string.split(message,"!")[2])
 	end
 end)
