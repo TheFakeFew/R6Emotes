@@ -5,7 +5,7 @@ end
 local plr : Player = owner
 local chr : Model = owner.Character
 local hum : Humanoid = chr:FindFirstChildOfClass("Humanoid")
-local animate = chr.Animate
+local animate = chr:FindFirstChild("Animate")
 local tweening = true
 function getData(name : string)
 	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/"..(name or "")..".lua")
@@ -71,7 +71,9 @@ function playAnim(name : string)
 	if(not data)then
 		return print("Doesnt Exist.")
 	end
-	animate.Disabled = true
+	if(animate)then
+		animate.Disabled = true
+	end
 	local keyframes = data.Keyframes
 	local looping = data.Properties.Looping or false
 	local lastt = 0
@@ -95,7 +97,9 @@ function playAnim(name : string)
 			end
 		else
 			stopAnims()
-			animate.Disabled = false
+			if(animate)then
+				animate.Disabled = false
+			end
 		end
 	end
 	local lastkeyframe = 0
