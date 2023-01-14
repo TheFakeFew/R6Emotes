@@ -129,9 +129,10 @@ owner.Chatted:Connect(function(message)
     elseif(string.lower(message):sub(1,8)=="tweened!")then
         local t = string.split(message,"!")[2]
         if(t=="false")then
-            tweened = false
+            tweening = false
         else
-            tweened = true
+            tweening = true
         end
+        print(tweening)
 	end
 end)
