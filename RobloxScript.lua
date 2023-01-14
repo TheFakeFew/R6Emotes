@@ -44,8 +44,8 @@ function stopAnims()
 			task.cancel(v)
 		end)
 	end
-	table.clear(anims)
 	wait()
+	table.clear(anims)
 	for i,v in next, tweens do
 		pcall(function()
 			v:Stop()
