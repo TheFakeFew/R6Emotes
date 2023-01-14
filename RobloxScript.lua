@@ -5,13 +5,10 @@ local plr : Player = owner
 local chr : Model = owner.Character
 local hum : Humanoid = chr:FindFirstChildOfClass("Humanoid")
 local animate = chr.Animate
-for i,v in next, hum.Animator:GetPlayingAnimationTracks() do
-	v:Stop()
-end
 local tweening = true
 function getData(name : string)
-	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/"..name..".lua")
-	local DATA = loadstring(data)()
+	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/"..name or ""..".lua")
+	local DATA = loadstring(data or "")()
 	return DATA or nil
 end
 local anims = {}
@@ -65,9 +62,6 @@ function playAnim(name : string)
 		return print("Doesnt Exist.")
 	end
 	animate.Disabled = true
-	for i,v in next, hum.Animator:GetPlayingAnimationTracks() do
-		v:Stop()
-	end
 	local keyframes = data.Keyframes
 	local looping = data.Properties.Looping or false
 	local lastt = 0
@@ -112,6 +106,6 @@ playAnim("Kazotsky")
 
 owner.Chatted:Connect(function(message)
 	if(string.lower(message):sub(1,5)=="anim!")then
-		playAnim()
+		playAnim(string.split(message,"!")[2])
 	end
 end)
