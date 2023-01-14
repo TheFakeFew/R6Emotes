@@ -45,7 +45,7 @@ function stopAnims()
 		end)
 	end
 	wait()
-	table.clear(anims)
+	anims = {}
 	for i,v in next, tweens do
 		pcall(function()
 			v:Stop()
@@ -105,7 +105,7 @@ function playAnim(name : string)
 	local easestyle = Enum.EasingStyle.Linear
 	local function onend()
 		if(looping)then
-			table.clear(anims)
+			anims = {}
 			local lastkeyframe = 0
 			for i,v in next, keyframes do
 				if(i>lastkeyframe)then
