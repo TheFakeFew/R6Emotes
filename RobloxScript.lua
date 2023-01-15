@@ -51,6 +51,7 @@ function stopAnims()
 			v:Stop()
 		end)
 	end
+	tweens = {}
 	for i,v in next, origc0s do
 		welds[i].C0 = v
 	end
@@ -106,6 +107,7 @@ function playAnim(name : string)
 	local function onend()
 		if(looping)then
 			anims = {}
+			tweens = {}
 			local lastkeyframe = 0
 			for i,v in next, keyframes do
 				if(i>lastkeyframe)then
