@@ -1,6 +1,9 @@
 if(not owner)then
 	getfenv(1).owner = script.Parent:IsA("PlayerGui") and script.Parent.Parent or game:GetService('Players'):GetPlayerFromCharacter(script.Parent)
 end
+if(not NLS)then
+	getfenv(1).NLS = function() end
+end
 local plr : Player = owner
 local chr : Model = owner.Character
 local hum : Humanoid = chr:FindFirstChildOfClass("Humanoid")
@@ -31,6 +34,7 @@ local origc0s = {}
 for i,v in next, welds do
 	origc0s[i] = v.C0
 end
+print(welds)
 function stopAnims()
 	NLS([[
 	    local chr = owner.Character
@@ -62,30 +66,42 @@ end
 
 function setC0s(tbl : {},time,easestyle)
 	local anims = tbl["HumanoidRootPart"]
-	for i,v in next, anims do
-		if(welds[i])then
-			if(tweening)then
-				local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time,easestyle),{
-					C0 = origc0s[i]*v.CFrame
-				})
-				tw:Play()
-				table.insert(tweens,tw)
-			else
-				welds[i].C0 = origc0s[i]*v.CFrame
-			end
-		end
+	local function recurse(v)
 		for i,v in next, v do
 			if(welds[i])then
 				if(tweening)then
+					pcall(function()
+						local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time,easestyle),{
+							C0 = origc0s[i]*v.CFrame
+						})
+						tw:Play()
+						table.insert(tweens,tw)
+					end)
+				else
+					pcall(function()
+						welds[i].C0 = origc0s[i]*v.CFrame
+					end)
+				end
+				recurse(v)
+			end
+		end
+	end
+	for i,v in next, anims do
+		if(welds[i])then
+			if(tweening)then
+				pcall(function()
 					local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time,easestyle),{
 						C0 = origc0s[i]*v.CFrame
 					})
 					tw:Play()
 					table.insert(tweens,tw)
-				else
+				end)
+			else
+				pcall(function()
 					welds[i].C0 = origc0s[i]*v.CFrame
-				end
+				end)
 			end
+			recurse(v)
 		end
 	end
 end
