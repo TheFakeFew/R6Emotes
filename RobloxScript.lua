@@ -21,7 +21,7 @@ NLS([[
 		v:Stop()
 	end
 ]],chr)
-wait()
+wait(1)
 local anims = {}
 local welds = {}
 local tweens = {}
