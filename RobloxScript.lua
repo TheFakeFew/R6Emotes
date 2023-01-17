@@ -21,7 +21,7 @@ NLS([[
 		v:Stop()
 	end
 ]],chr)
-wait(1)
+wait(.3)
 local anims = {}
 local welds = {}
 local tweens = {}
@@ -36,6 +36,7 @@ for i,v in next, welds do
 end
 print(welds)
 function stopAnims()
+	coroutine.wrap(function()
 	NLS([[
 	    local chr = owner.Character
 	    local hum = chr:FindFirstChildOfClass("Humanoid")
@@ -43,6 +44,7 @@ function stopAnims()
 	    	v:Stop()
 	    end
     ]],chr)
+	end)()
 	for i,v in next, anims do
 		pcall(function()
 			task.cancel(v)
