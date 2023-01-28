@@ -73,8 +73,8 @@ function setC0s(tbl : {},time,easestyle)
 		for i,v in next, v do
 			if(welds[i])then
 				if(tweening)then
+					print((welds[i].C0.Position - v.CFrame.Position).Magnitude)
 					pcall(function()
-						print((welds[i].C0.Position - v.CFrame.Position).Magnitude)
 						local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new((welds[i].C0.Position - v.CFrame.Position).Magnitude,easestyle),{
 							C0 = origc0s[i]*v.CFrame
 						})
@@ -93,8 +93,8 @@ function setC0s(tbl : {},time,easestyle)
 	for i,v in next, anims do
 		if(welds[i])then
 			if(tweening)then
+				print((welds[i].C0.Position - v.CFrame.Position).Magnitude)
 				pcall(function()
-					print((welds[i].C0.Position - v.CFrame.Position).Magnitude)
 					local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new((welds[i].C0.Position - v.CFrame.Position).Magnitude,easestyle),{
 						C0 = origc0s[i]*v.CFrame
 					})
