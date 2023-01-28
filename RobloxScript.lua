@@ -72,10 +72,10 @@ function setC0s(tbl : {},time,easestyle)
 	local function recurse(v)
 		for i,v in next, v do
 			if(welds[i])then
-				print((welds[i].C0.Position - v.CFrame.Position).Magnitude/5)
+				print((welds[i].C0.Position - v.CFrame.Position).Magnitude/10)
 				if(tweening)then
 					pcall(function()
-						local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new((welds[i].C0.Position - v.CFrame.Position).Magnitude/5,easestyle),{
+						local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new((welds[i].C0.Position - v.CFrame.Position).Magnitude/10,easestyle),{
 							C0 = origc0s[i]*v.CFrame
 						})
 						tw:Play()
@@ -92,10 +92,10 @@ function setC0s(tbl : {},time,easestyle)
 	end
 	for i,v in next, anims do
 		if(welds[i])then
-			print((welds[i].C0.Position - v.CFrame.Position).Magnitude/5)
+			print((welds[i].C0.Position - v.CFrame.Position).Magnitude/10)
 			if(tweening)then
 				pcall(function()
-					local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new((welds[i].C0.Position - v.CFrame.Position).Magnitude/5,easestyle),{
+					local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new((welds[i].C0.Position - v.CFrame.Position).Magnitude/10,easestyle),{
 						C0 = origc0s[i]*v.CFrame
 					})
 					tw:Play()
