@@ -1,8 +1,7 @@
 return {
 	Properties = {
 		Looping = true,
-		Priority = Enum.AnimationPriority.Action,
-		Song = "Thriller"
+		Priority = Enum.AnimationPriority.Action
 	},
 	Keyframes = {
 		[0] = {
