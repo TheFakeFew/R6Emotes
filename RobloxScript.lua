@@ -272,7 +272,11 @@ function playAnim(name : string)
 	end
 end
 
-owner.Chatted:Connect(function(message)
+owner.Chatted:Connect(function(msg)
+	local message = msg
+	if(message:sub(1,3) == "/e ")then
+		message = msg:sub(4)
+	end
 	if(string.lower(message):sub(1,5)=="anim!")then
 		playAnim(string.split(message,"!")[2])
 	elseif(string.lower(message):sub(1,8)=="tweened!")then
