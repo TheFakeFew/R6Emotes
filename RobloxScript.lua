@@ -68,14 +68,12 @@ function stopAnims()
 end
 
 function setC0s(tbl : {},time,easestyle)
-	local anims = tbl["HumanoidRootPart"]
 	local function recurse(v)
 		for i,v in next, v do
 			if(welds[i])then
-				print((welds[i].C0.Position - v.CFrame.Position).Magnitude/10)
 				if(tweening)then
 					pcall(function()
-						local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new((welds[i].C0.Position - v.CFrame.Position).Magnitude/10,easestyle),{
+						local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new(time,easestyle),{
 							C0 = origc0s[i]*v.CFrame
 						})
 						tw:Play()
@@ -86,29 +84,11 @@ function setC0s(tbl : {},time,easestyle)
 						welds[i].C0 = origc0s[i]*v.CFrame
 					end)
 				end
-				recurse(v)
 			end
+			pcall(recurse,v)
 		end
 	end
-	for i,v in next, anims do
-		if(welds[i])then
-			print((welds[i].C0.Position - v.CFrame.Position).Magnitude/10)
-			if(tweening)then
-				pcall(function()
-					local tw = game:GetService('TweenService'):Create(welds[i],TweenInfo.new((welds[i].C0.Position - v.CFrame.Position).Magnitude/10,easestyle),{
-						C0 = origc0s[i]*v.CFrame
-					})
-					tw:Play()
-					table.insert(tweens,tw)
-				end)
-			else
-				pcall(function()
-					welds[i].C0 = origc0s[i]*v.CFrame
-				end)
-			end
-			recurse(v)
-		end
-	end
+	pcall(recurse,tbl)
 end
 
 function getSongData(songname)
@@ -241,6 +221,7 @@ function playAnim(name : string)
 	end
 	local keyframes = data.Keyframes
 	local looping = data.Properties.Looping or false
+	print(looping)
 	local lastt = 0
 	local easestyle = Enum.EasingStyle.Linear
 	if(data.Properties.Song)then
@@ -262,7 +243,7 @@ function playAnim(name : string)
 				local thread
 				thread = task.delay(i,function()
 					local time = i-lastt
-					setC0s(v,i-lastt,easestyle)
+					setC0s(v,time,easestyle)
 					lastt = i
 				end)
 				table.insert(anims,thread)
@@ -284,7 +265,7 @@ function playAnim(name : string)
 		local thread 
 		thread = task.delay(i,function()
 			local time = i-lastt
-			setC0s(v,i-lastt,easestyle)
+			setC0s(v,time,easestyle)
 			lastt = i
 		end)
 		table.insert(anims,thread)
