@@ -106,7 +106,7 @@ function getInstruments()
 end
 
 function getFallback()
-	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/OrangeCash090/MIDI-Player-Roblox/main/Instruments.lua")
+	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/__InstrumentFallback.lua")
 	local DATA = loadstring(data or "")()
 	return DATA or nil
 end
