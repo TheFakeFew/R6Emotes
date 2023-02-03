@@ -105,10 +105,19 @@ function getInstruments()
 	return DATA or nil
 end
 
-local instrumentsfallback = {
-	{"rbxassetid://31173820", "standard kit", settings = {["Gain"] = 0.1}},
-	{"rbxassetid://5924276201", "acoustic grand piano", settings = {["Gain"] = 0, ["Offset"] = -7}}
-}
+function getFallback()
+	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/OrangeCash090/MIDI-Player-Roblox/main/Instruments.lua")
+	local DATA = loadstring(data or "")()
+	return DATA or nil
+end
+
+local instrumentsfallback = getFallback()
+if(not instrumentsfallback or instrumentsfallback == {})then
+	instrumentsfallback = {
+		{"rbxassetid://31173820", "standard kit", settings = {["Gain"] = 0.1}},
+		{"rbxassetid://5924276201", "acoustic grand piano", settings = {["Gain"] = 0, ["Offset"] = -7}}
+	}
+end
 
 local instruments = getInstruments()
 if(not instruments or instruments == {})then
