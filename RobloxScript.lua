@@ -27,7 +27,7 @@ local welds = {}
 local tweens = {}
 for i,v in next, chr:GetDescendants() do
 	if(v:IsA("JointInstance") and not v:FindFirstAncestorOfClass("Accessory"))then
-		welds[v.Part1.Name or ""] = v
+		welds[v.Part1 and v.Part1.Name or ""] = v
 	end
 end
 
