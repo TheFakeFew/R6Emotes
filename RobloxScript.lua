@@ -9,6 +9,7 @@ local chr : Model = owner.Character
 local hum : Humanoid = chr:FindFirstChildOfClass("Humanoid")
 local animate = chr:FindFirstChild("Animate")
 local tweening = true
+local midienabled = false
 function getData(name : string)
 	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/"..(name or "")..".lua")
 	local DATA = loadstring(data or "")()
@@ -164,6 +165,7 @@ function playSong(songname)
 				for i,v in next, v.notes do
 					local thread
 					thread = task.delay(v.time,function()
+						if(midienabled)then
 						notenum = notenum + 1
 						local settings = id.settings
 						local snd = Instance.new("Sound",rootpart)
@@ -193,6 +195,7 @@ function playSong(songname)
 							tw.Completed:Wait()
 							snd:Destroy()
 						end)
+					end
 					end)
 					table.insert(songs,thread)
 				end
@@ -296,5 +299,13 @@ owner.Chatted:Connect(function(msg)
 			tweening = true
 		end
 		print(tweening)
+	elseif(string.lower(message):sub(1,5)=="midi!")then
+		local t = string.split(message,"!")[2]
+		if(t=="false")then
+			midienabled = false
+		else
+			midienabled = true
+		end
+		print(midi)
 	end
 end)
