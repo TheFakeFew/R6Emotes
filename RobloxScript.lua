@@ -100,26 +100,13 @@ function getSongData(songname)
 	return game:GetService("HttpService"):JSONDecode(json)
 end
 
-function getFallback()
-	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/__InstrumentFallback.lua")
+function families()
+	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/ClientMidi/main/Core/Families.lua")
 	local DATA = loadstring(data or "")()
 	return DATA or nil
 end
 
-local instrumentsfallback = getFallback()
-if(not instrumentsfallback or instrumentsfallback == {})then
-	instrumentsfallback = {
-		{"rbxassetid://31173820", "standard kit", settings = {["Gain"] = 0.1}},
-		{"rbxassetid://5924276201", "acoustic grand piano", settings = {["Gain"] = 0, ["Offset"] = -7}}
-	}
-end
-instruments = instrumentsfallback
-
-local families = {}
-
-for i,v in next, instruments do
-	families[v[2]] = {v[1], settings = v.settings or {}, pitches = v.pitches or {}}
-end
+local families = families()
 
 function notetopitch(note, offset)
 	return (440 / 32) * math.pow(2, ((note + offset) / 12)) / 440
