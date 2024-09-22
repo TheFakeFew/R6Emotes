@@ -100,12 +100,6 @@ function getSongData(songname)
 	return game:GetService("HttpService"):JSONDecode(json)
 end
 
-function getInstruments()
-	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/ClientMidi/main/Core/Families.lua")
-	local DATA = loadstring(data or "")()
-	return DATA or nil
-end
-
 function getFallback()
 	local data = game:GetService('HttpService'):GetAsync("https://raw.githubusercontent.com/TheFakeFew/R6Emotes/main/__InstrumentFallback.lua")
 	local DATA = loadstring(data or "")()
@@ -119,11 +113,7 @@ if(not instrumentsfallback or instrumentsfallback == {})then
 		{"rbxassetid://5924276201", "acoustic grand piano", settings = {["Gain"] = 0, ["Offset"] = -7}}
 	}
 end
-
-local instruments = getInstruments()
-if(not instruments or instruments == {})then
-	instruments = instrumentsfallback
-end
+instruments = instrumentsfallback
 
 local families = {}
 
