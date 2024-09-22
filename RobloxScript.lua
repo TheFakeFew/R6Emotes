@@ -150,7 +150,7 @@ function playSong(songname)
 						if(settings and settings["Gain"])then
 							snd.Volume += settings["Gain"]
 						end
-						snd.SoundId = id[1]
+						snd.SoundId = id.id
 						if(id.pitches and id.pitches[v.midi])then
 							snd.SoundId = id.pitches[v.midi]
 						end
